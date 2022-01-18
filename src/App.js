@@ -33,7 +33,7 @@ function App() {
       console.log("AXIOS ERROR: ", err);
     });
 
-  https://react-blog-app-backend.herokuapp.com/api/v1/blogs
+  // https://react-blog-app-backend.herokuapp.com/api/v1/blogs
 
   return (
     <div className="blog-apps">

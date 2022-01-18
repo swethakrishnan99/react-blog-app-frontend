@@ -1,6 +1,6 @@
 .get-started-container {
   width: 500px;
-  height: 600px;
+  height: 700px;
   border: 30px solid rgb(241, 239, 239);
   box-shadow: -2px -2px 20px 15px rgb(226, 224, 224);
   border-radius: 10px;
@@ -9,10 +9,21 @@
   width: 100vw;
   height: 100vh;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
 .btns-container {
-  padding: 10px;
+  width: 100%;
 }
 .btns-container button {
   width: 50%;
@@ -20,7 +31,12 @@
   background-color: rgb(241, 239, 239);
   border: none;
 }
-button:disabled {
+.warning {
+  margin: auto;
+  color: red;
+  padding-left: 20px;
+}
+.change-content:disabled {
   background-color: white;
   border-top: 4px solid green;
   color: black;
@@ -54,6 +70,9 @@ button:disabled {
   font-weight: bold;
   font-size: 20px;
   border: none;
+}
+.get-started-btn:disabled {
+  background-color: rgba(0, 128, 0, 0.5);
 }
 #signin .large {
   font-size: 60px;

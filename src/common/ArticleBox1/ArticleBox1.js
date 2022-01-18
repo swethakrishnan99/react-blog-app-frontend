@@ -1,12 +1,12 @@
 import React from "react";
 import "./ArticleBox.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function ArticleBox1(props) {
   const { news } = props;
-  // const { push } = useHistory();
+  const navigate = useNavigate();
   const handleClick = (id) => {
-    // push(`/home/${id}`);
+    navigate(`/blogs/${id}`, { replace: true });
   };
   return (
     <>

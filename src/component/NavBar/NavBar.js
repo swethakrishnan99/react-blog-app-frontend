@@ -5,7 +5,6 @@ import Logo from "../../common/Logo/Logo";
 import "./NavBar.scss";
 
 export default function NavBar(props) {
-    const { onClickSignIn } = props
     const navItem = ["Bollywood", "Technology", "Hollywood", "Fitness", "Food"]
 
     return (
@@ -22,9 +21,9 @@ export default function NavBar(props) {
                         </li>
                     );
                 })}
-                {/* <li>
-                    <NavLink to="sign-in" onClick={onClickSignIn}>Sign In</NavLink>
-                </li> */}
+                <li>
+                    <NavLink to="sign-in" onClick={props.setLoginFalse}>{props.login ? "Sign Out" : "Sign In"}</NavLink>
+                </li>
             </ul>
             <hr className="border-line" />
         </div>

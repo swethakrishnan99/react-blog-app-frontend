@@ -8,53 +8,54 @@ import AddBox from "../../common/AddBox/AddBox";
 import HomeImgBox from "../../common/HomeImgBox/HomeImgBox";
 import TopPosts from "../../common/TopPosts/TopPosts";
 import LatestStories from "../../common/LatestStories/LatestStories"
+import MostViewed from "../../common/MostViewed/MostViewed";
 
-export default function () {
-    const [blogs, setBlogs] = useState([]);
-    axios
-        .get("http://localhost:8000/api/v1/blogs")
-        .then((res) =>
-            setBlogs(res.data)
-        );
-    if (blogs.length === 0) return <span>loading...</span>;
-    const image1 = { backgroundImage: `url(${blogs[0].image})` };
-    const image2 = { backgroundImage: `url(${blogs[9].image})` };
-    const image3 = { backgroundImage: `url(${blogs[20].image})` };
+export default function HomePage() {
+    const [latest, setLatest] = useState([]);
+    const [topPosts, setTopPosts] = useState([]);
+    const [featured, setFeatured] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get("https://react-blog-app-backend.herokuapp.com/api/v1/blogs/latest")
+            .then((res) => {
+                setLatest(res.data)
+            });
+        axios
+            .get("https://react-blog-app-backend.herokuapp.com/api/v1/blogs/most-viewed")
+            .then((res) => {
+                setTopPosts(res.data)
+            });
+        axios
+            .get("https://react-blog-app-backend.herokuapp.com/api/v1/blogs/featured")
+            .then((res) => {
+                setFeatured(res.data)
+            });
+    }, []);
+
+    if (featured.length === 0) return <span>loading...</span>;
 
     return (
         <div className="home-page">
-            <div className="grid-container">
-                <div className="item-1" style={image1}>
-                    <p>{blogs[0].title}</p>
-                    <span>{`${blogs[0].category}/${blogs[0].createdOn}`}</span>
-                </div>
-                <div className="item-2" style={image2}>
-                    <p>{blogs[9].title}</p>
-                    <span>{`${blogs[9].category}/${blogs[9].createdOn}`}</span>
-                </div>
-                <div className="item-2" style={image3}>
-                    <p>{blogs[20].title}</p>
-                    <span>{`${blogs[20].category}/${blogs[20].createdOn}`}</span>
-                </div>
-            </div>
+            <MostViewed featured={featured} />
             <div>
                 <Title title="The Latest" />
-                <TheLatest blogs={blogs} />
+                <TheLatest blogs={latest} />
             </div>
             <div className="flex">
                 <div><Title title="Latest Article" />
-                    <LatestArticles blogs={blogs} />
-                    <HomeImgBox blog={blogs[24]} /></div>
+                    <LatestArticles blogs={latest} />
+                    <HomeImgBox blog={featured[1]} /></div>
                 <div>
                     <AddBox />
                     <Title title="Top Posts" />
-                    <TopPosts blogs={blogs} />
+                    <TopPosts blogs={topPosts} />
                 </div>
 
             </div>
             <div>
-                <Title title="Latest Stories" />
-                <LatestStories blogs={blogs} />
+                <Title title="Most Featured" />
+                <LatestStories blogs={featured} />
             </div>
         </div>
     );

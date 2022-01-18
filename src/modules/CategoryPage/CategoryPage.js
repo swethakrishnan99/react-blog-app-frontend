@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
@@ -13,29 +13,41 @@ import "./CategoryPage.scss"
 
 export default function CategoryPage() {
     const { category } = useParams()
+    const navigate = useNavigate();
+    const categories = ["Hollywood", "Bollywood", "Food", "Technology", "Fitness"]
+    categories.indexOf(category) === -1 && navigate('/not-found')
     const [ending, setEnding] = useState(5);
-    const [blogs, setBlogs] = useState([]);
-    axios.get(`http://localhost:8000/api/v1/blogs/${category}`).then((res) => {
-        setBlogs(res.data)
-        // console.log("RESPONSE RECEIVED: ", blogs);
-    })
-        .catch((err) => {
-            console.log("AXIOS ERROR: ", err);
+    const [latest, setLatest] = useState([]);
+    const [topPosts, setTopPosts] = useState([]);
+    useEffect(() => {
+        axios.get(`https://react-blog-app-backend.herokuapp.com/api/v1/blogs/${category}/most-viewed`).then((res) => {
+            setTopPosts(res.data)
         })
+        axios.get(`https://react-blog-app-backend.herokuapp.com/api/v1/blogs/${category}/latest`).then((res) => {
+            setLatest(res.data)
+
+        })
+            .catch((err) => {
+                console.log("AXIOS ERROR: ", err);
+            })
+        setEnding(5)
+    }, [category])
+
     const loadMore = () => {
-        if (ending >= blogs.length) return;
+        if (ending >= latest.length) return;
         setEnding((prevState) => prevState + 5);
     };
+    if (latest.length === 0) return <span>loading...</span>;
 
     return (
         <div className="categoryPage">
             <div className="flex-column">
                 <Title title={category} />
-                {blogs.slice(0, ending).map((news, index) => (
+                {latest.slice(0, ending).map((news, index) => (
                     <ArticleBox1 news={news} key={index} />
                 )
                 )}
-                {ending < blogs.length ? (
+                {ending < latest.length ? (
                     <FontAwesomeIcon
                         icon={faArrowDown}
                         onClick={loadMore}
@@ -48,7 +60,7 @@ export default function CategoryPage() {
             <div className="flex-column">
                 <div>
                     <Title title={"Top Posts"} />
-                    {blogs.slice(0, 3).map((news, index) => (
+                    {topPosts.map((news, index) => (
                         <ArticleBox2 news={news} key={index} index={index + 1} />
                     ))}
                 </div>

@@ -1,24 +1,24 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./ArticleBox3.css";
 
 export default function ArticleBox3(props) {
-  const { title, content, category, id } = props.news;
-  const handleClick = () => {
-    // push(`/home/${id}`);
-  };
+  const { title, content, category, id, createdOn } = props.news;
+  const navigate = useNavigate();
+  const handleClick = (id) => {
+    navigate(`/blogs/${id}`, { replace: true });
+  }
+
   return (
     <div
-      className={
-        (id + 1) % 3 === 0
-          ? "articleBox3 flex-column middle-border"
-          : "articleBox3 flex-column"
-      }
-      onClick={handleClick}
+      className="articleBox3 flex-column"
+
+      onClick={() => handleClick(id)}
     >
       <p className="article3-title">{title}</p>
       <p className="article3-para">{content}</p>
       <p className="article3-subtitle">
-        <span className="black">{category}</span>/ Nov 19 2021
+        <span className="black">{category}</span>/{createdOn}
       </p>
     </div>
   );

@@ -5,9 +5,9 @@ export default function TheLatest(props) {
   const { blogs } = props;
   return (
     <div className="theLatest-box flex-row">
+      <ArticleBox4 news={blogs[0]} />
       <ArticleBox4 news={blogs[1]} />
-      <ArticleBox4 news={blogs[24]} />
-      <ArticleBox4 news={blogs[34]} />
+      <ArticleBox4 news={blogs[2]} />
     </div>
   );
 }

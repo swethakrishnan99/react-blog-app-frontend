@@ -1,50 +1,60 @@
 import "./App.css";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import NavBar from "./component/NavBar/NavBar";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./modules/HomePage/HomePage";
 import CategoryPage from "./modules/CategoryPage/CategoryPage";
-// import GetStarted from "./modules/GetStarted/GetStarted";
+import GetStarted from "./modules/GetStarted/GetStarted";
 import NotFound from "./modules/NotFound/NotFound";
 import BlogPage from "./modules/BlogPage/BlogPage";
 import NewsProvider from "./News";
 
 function App() {
   const blogs = useContext(NewsProvider);
+  const [loginPage, setLoginPage] = useState(false);
+  const [login, setLogin] = useState(false);
+  const isLoginPage = () => {
+    setLoginPage((prevState) => !prevState);
+  };
+  const setLoginTrue = () => {
+    setLogin(true);
+  };
+  const setLoginFalse = () => {
+    setLogin(false);
+  };
 
   axios
-    .post('http://localhost:8000/api/v1/blogs', blogs)
+    .post("https://react-blog-app-backend.herokuapp.com/api/v1/blogs", blogs)
     .then((res) => {
       console.log("RESPONSE RECEIVED: ", res);
     })
     .catch((err) => {
       console.log("AXIOS ERROR: ", err);
-    })
-  const [signIn, setSignIn] = React.useState(false);
-  const onClickSignIn = () => setSignIn((prevState) => !prevState);
+    });
 
-
-
+  https://react-blog-app-backend.herokuapp.com/api/v1/blogs
 
   return (
     <div className="blog-apps">
-      {signIn ? (
+      <>
+        {!loginPage && <NavBar setLoginFalse={setLoginFalse} login={login} />}
         <Routes>
-          {/* <Route path="sign-in" element={<GetStarted />} /> */}
+          <Route
+            path="/sign-in"
+            element={
+              <GetStarted
+                isLoginPage={isLoginPage}
+                setLoginTrue={setLoginTrue}
+              />
+            }
+          />
           <Route path="/not-found" element={<NotFound />} />
+          <Route index element={<HomePage />} />
+          <Route path=":category" element={<CategoryPage />} />
+          <Route path="blogs/:id" element={<BlogPage login={login} />} />
         </Routes>
-      ) : (
-        <>
-          <NavBar onClickSignIn={onClickSignIn} />
-          <Routes>
-            <Route index element={<HomePage />} />
-            <Route path=":category" element={<CategoryPage />}>
-              <Route path=":category/:id" element={<BlogPage />} />
-            </Route>
-          </Routes>
-        </>
-      )}
+      </>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 .articleBox3 {
-  padding: 0 50px;
+  padding: 50px;
   width: 18vw;
+  border: 1px solid black;
 }
 .article3-title {
   font-size: 25px;

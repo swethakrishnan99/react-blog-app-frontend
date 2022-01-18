@@ -1,14 +1,13 @@
 import React from "react";
 import "./ArticleBox4.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function ArticleBox4(props) {
-  // const { push } = useHistory();
   const { news } = props;
+  const navigate = useNavigate();
   const handleClick = (id) => {
-    console.log(id)
-    // push(`/home/${id}`);
-  };
+    navigate(`/blogs/${id}`, { replace: true })
+  }
   return (
     <div
       className="articleBox4 flex-column"

@@ -1,59 +1,59 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./GetStarted.css";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import SiteLogo from "../../common/Logo/Logo";
-import { withRouter } from "react-router-dom";
+import Logo from "../../common/Logo/Logo";
+import { useEffect, useLayoutEffect } from "react";
 
-class GetStarted extends Component {
-  state = { signIn: true };
-  componentDidMount() {
-    this.props.toggleNav();
-  }
-  componentWillUnmount() {
-    this.props.toggleNav();
-  }
-  toggleSignInPage = () =>
-    this.setState((prevState) => ({
-      signIn: !prevState.signIn,
-    }));
-  render() {
-    return (
-      <div className="get-started-page flex-row">
+function GetStarted(props) {
+  const [signUP, setSignUp] = useState(false);
+  const toggleSignInPage = () => {
+    setSignUp((prevState) => !prevState);
+  };
+  // useEffect(() => {
+  //   props.isLoginPage()
+
+  // }, [])
+  useEffect(() => {
+    props.isLoginPage();
+    return () => {
+      props.isLoginPage();
+    };
+  }, []);
+  return (
+    <div>
+      <div className="get-started-page">
         <div className="get-started-container" id="signin">
-          <div className="flex-column2">
+          <div className="flex-column">
             <div className="flex-row1 btns-container">
               <button
                 id="onSignIn"
-                disabled={this.state.signIn}
-                onClick={this.toggleSignInPage}
+                className="change-content"
+                disabled={!signUP}
+                onClick={toggleSignInPage}
               >
                 SignIn
               </button>
               <button
                 id="onSignUp"
-                disabled={!this.state.signIn}
-                onClick={this.toggleSignInPage}
+                className="change-content"
+                disabled={signUP}
+                onClick={toggleSignInPage}
               >
                 SignUp
               </button>
             </div>
-            <SiteLogo />
+            <Logo />
           </div>
-          {this.state.signIn ? (
-            <SignIn
-              input={this.props.onChange}
-              onSubmit={this.props.onSubmit}
-            />
+          {signUP === true ? (
+            <SignUp setLoginTrue={props.setLoginTrue} />
           ) : (
-            <SignUp
-              input={this.props.onChange}
-              onSubmit={this.props.onSubmit}
-            />
+            <SignIn setLoginTrue={props.setLoginTrue} />
           )}
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
-export default withRouter(GetStarted);
+
+export default GetStarted;
